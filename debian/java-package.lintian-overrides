@@ -1,0 +1,2 @@
+# java-package uses debhelper at runtime
+java-package binary: binary-package-depends-on-toolchain-package

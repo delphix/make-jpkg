@@ -8,58 +8,25 @@
 VERSION := $(shell head -n 1 $(CURDIR)/debian/changelog | sed 's/.*(//;s/).*//')
 B := $(CURDIR)/debian/java-package
 
-build: build-arch build-indep
-build-arch: build-stamp
-build-indep: build-stamp
+%:
+	dh $@
 
-build-stamp:
-	dh_testdir
+override_dh_auto_build-indep:
 	sed s/@VERSION@/$(VERSION)/ make-jpkg > make-jpkg.out
-	touch $@
+	dh_auto_build -i
 
-clean:
-	dh_testdir
-	dh_testroot
+override_dh_clean:
 	rm -f build-stamp SUPPORTED make-jpkg.out debian/semantic.cache
 	dh_clean
 
-install: build
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
+override_dh_auto_install-indep:
 	install -m 755 make-jpkg.out $(B)/usr/bin/make-jpkg
 	cp lib/*.sh $(B)/usr/share/java-package/
 	find $(B) -type d -name .svn | xargs -r rm -r
-
-# Generate SUPPORTED
+	# Generate SUPPORTED
 	echo "java-package currently supports the following binary packages:" > SUPPORTED
 	echo >> SUPPORTED
 	echo "(This list is automatically generated, do not edit)" >> SUPPORTED
 	echo >> SUPPORTED
 	grep -h "SUPPORTED$$" $(wildcard $(CURDIR)/lib/*-*.sh) | sed 's/"//g;s/).*//' >> SUPPORTED
-
-	dh_install
-
-binary: binary-indep
-
-binary-arch:
-
-binary-indep: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs 
-	dh_installdocs
-	dh_installman make-jpkg.1
-	dh_link
-#	dh_strip
-	dh_compress 
-	dh_fixperms
-	dh_makeshlibs
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-.PHONY: build clean binary-indep binary install
+	dh_auto_install -i

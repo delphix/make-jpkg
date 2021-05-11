@@ -4,8 +4,6 @@ java-package (0.63) UNRELEASED; urgency=medium
   * Team upload.
   * Removed support for the browser plugin (Closes: #779725)
   * Suggest openjdk-8-jre instead of openjdk-7-jre
-  * Standards-Version updated to 4.2.1
-  * Switch to debhelper level 11
   * Use salsa.debian.org Vcs-* URLs
 
   [ Sven Hoexter ]
@@ -15,7 +13,15 @@ java-package (0.63) UNRELEASED; urgency=medium
   [ Jelmer Vernooĳ ]
   * Use secure copyright file specification URI.
 
- -- Sven Hoexter <hoexter@debian.org>  Mon, 22 Oct 2018 15:39:32 +0200
+  [ tony mancill ]
+  * Replace dependency on libgl1-mesa-glx (Closes: #941808)
+  * Add lintian override for debhelper dependency
+  * Use dh sequencer in debian/rules
+  * Use debhelper 12 for Build-Depends
+  * Use dh sequencer in debian/rules
+  * Bump Standards-Version to 4.4.1
+
+ -- tony mancill <tmancill@debian.org>  Sun, 06 Oct 2019 09:00:07 -0700
 
 java-package (0.62) unstable; urgency=medium
 
