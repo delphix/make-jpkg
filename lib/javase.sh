@@ -276,6 +276,9 @@ j2se_run() {
       amd64|x64)
         j2se_debian_arch=amd64
         ;;
+      arm64|aarch64)
+	j2se_debian_arch=arm64
+	;;
     esac
     j2se_name="$j2se_package-$j2se_debian_arch"
     local target="$package_dir/$j2se_name"
