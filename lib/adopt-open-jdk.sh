@@ -4,29 +4,29 @@ open_j2sdk_detect() {
   j2se_release=0
 
   # JDK 11 release candidate (OpenJDK11U-jdk_x64_linux_hotspot_11_28.tar.gz)
-  if [[ $archive_name =~ OpenJDK11U-jdk_x64_linux_hotspot_11([\.0-9]+)_([0-9]+)\.tar\.gz ]]
+  if [[ $archive_name =~ OpenJDK11U-jdk_([a-z0-9]+)_linux_hotspot_11([\.0-9]+)_([0-9]+)\.tar\.gz ]]
   then
-      j2se_release=11
-      j2se_update="${BASH_REMATCH[1]}"
-      j2se_build="${BASH_REMATCH[2]}"
-      j2se_arch="x64"
-      j2se_version_name="${j2se_release}${j2se_update} version ${j2se_release}+${j2se_build}"
-      j2se_version="${j2se_release}${j2se_update}+${j2se_build}${revision}"
-      j2se_expected_min_size=180 #Mb
-      j2se_binary_subdir="/bin"
-      open_no_man_jre_bin_jre="jaotc jar jarsigner java javac javadoc javap jcmd jconsole jdb jdeprscan jdeps jhsdb jimage jinfo jjs jlink jmap jmod jps jrunscript jshell jstack jstat jstatd keytool pack200 rmic rmid rmiregistry serialver unpack200"
-      open_bin_jdk=" "
-      open_jre_bin_hl=" "
-      open_jre_bin_jre=" "
+    j2se_release=11
+    j2se_arch="${BASH_REMATCH[1]}"
+    j2se_update="${BASH_REMATCH[2]}"
+    j2se_build="${BASH_REMATCH[3]}"
+    j2se_version_name="${j2se_release}${j2se_update} version ${j2se_release}+${j2se_build}"
+    j2se_version="${j2se_release}${j2se_update}+${j2se_build}${revision}"
+    j2se_expected_min_size=180 #Mb
+    j2se_binary_subdir="/bin"
+    open_no_man_jre_bin_jre="jaotc jar jarsigner java javac javadoc javap jcmd jconsole jdb jdeprscan jdeps jhsdb jimage jinfo jjs jlink jmap jmod jps jrunscript jshell jstack jstat jstatd keytool pack200 rmic rmid rmiregistry serialver unpack200"
+    open_bin_jdk=" "
+    open_jre_bin_hl=" "
+    open_jre_bin_jre=" "
   fi
 
   # Open JDK 8 release candidate (OpenJDK8U-jdk_x64_linux_hotspot_8u181b13.tar.gz)
-  if [[ $archive_name =~ OpenJDK8U-jdk_x64_linux_hotspot_8([a-z][0-9]+)([a-z][0-9]+)\.tar\.gz ]]
+  if [[ $archive_name =~ OpenJDK8U-jdk_([a-z0-9]+)_linux_hotspot_8([a-z][0-9]+)([a-z][0-9]+)\.tar\.gz ]]
   then
     j2se_release=8
-    j2se_update=${BASH_REMATCH[1]}
-    j2se_build=${BASH_REMATCH[2]}
-    j2se_arch=x64
+    j2se_arch="${BASH_REMATCH[1]}"
+    j2se_update="${BASH_REMATCH[2]}"
+    j2se_build="${BASH_REMATCH[3]}"
     j2se_version_name="${j2se_release} version ${j2se_release}${j2se_update}"
     j2se_version="${j2se_release}${j2se_update}${j2se_build}${revision}"
     j2se_expected_min_size=75 #Mb
@@ -52,6 +52,9 @@ open_j2sdk_detect() {
       amd64|x86_64-linux-gnu)
         if [[ "$j2se_arch" != "x64" && "$j2se_arch" != "amd64" ]]; then compatible=0; fi
         ;;
+      arm64|aarch64-linux-gnu)
+        if [[ "$j2se_arch" != "arm64" && "$j2se_arch" != "aarch64" ]]; then compatible=0; fi
+        ;;	      
     esac
 
     if [[ $compatible == 0 ]]
